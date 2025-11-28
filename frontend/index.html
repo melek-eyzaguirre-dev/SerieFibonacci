@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serie Fibonacci - Múltiples Lenguajes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .controls h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 120px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .language-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .language-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .language-header {
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .language-header.python { background: linear-gradient(135deg, #306998, #FFD43B); }
+        .language-header.java { background: linear-gradient(135deg, #f89820, #5382a1); }
+        .language-header.javascript { background: linear-gradient(135deg, #f7df1e, #323330); }
+        .language-header.csharp { background: linear-gradient(135deg, #239120, #68217a); }
+        .language-header.php { background: linear-gradient(135deg, #8892BF, #4F5B93); }
+
+        .language-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .language-header.python .language-icon { color: #306998; }
+        .language-header.java .language-icon { color: #f89820; }
+        .language-header.javascript .language-icon { color: #f7df1e; }
+        .language-header.csharp .language-icon { color: #68217a; }
+        .language-header.php .language-icon { color: #4F5B93; }
+
+        .language-header h3 {
+            font-size: 1.3rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .language-content {
+            padding: 20px;
+        }
+
+        .method-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .method-tab {
+            padding: 8px 15px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .method-tab:hover {
+            background: #e0e0e0;
+        }
+
+        .method-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .result-display {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 80px;
+        }
+
+        .result-display h4 {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .fibonacci-sequence {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .fibonacci-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .execution-time {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.9;
+        }
+
+        footer a {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .languages-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔢 Serie Fibonacci</h1>
+            <p>Implementaciones en Múltiples Lenguajes de Programación</p>
+        </header>
+
+        <div class="controls">
+            <h2>Configuración</h2>
+            <div class="input-group">
+                <label for="terms">Número de términos:</label>
+                <input type="number" id="terms" value="10" min="1" max="50">
+                <button class="btn" onclick="calculateAll()">Calcular Fibonacci</button>
+            </div>
+        </div>
+
+        <div class="languages-grid">
+            <!-- Python Card -->
+            <div class="language-card">
+                <div class="language-header python">
+                    <div class="language-icon">🐍</div>
+                    <h3>Python</h3>
+                </div>
+                <div class="language-content">
+                    <div class="method-tabs">
+                        <button class="method-tab active" onclick="switchMethod('python', 'iterative', this)">Iterativo</button>
+                        <button class="method-tab" onclick="switchMethod('python', 'recursive', this)">Recursivo</button>
+                        <button class="method-tab" onclick="switchMethod('python', 'generator', this)">Generator</button>
+                    </div>
+                    <div class="result-display">
+                        <h4>Resultado:</h4>
+                        <div id="python-result" class="fibonacci-sequence"></div>
+                        <div id="python-time" class="execution-time"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Java Card -->
+            <div class="language-card">
+                <div class="language-header java">
+                    <div class="language-icon">☕</div>
+                    <h3>Java</h3>
+                </div>
+                <div class="language-content">
+                    <div class="method-tabs">
+                        <button class="method-tab active" onclick="switchMethod('java', 'iterative', this)">Iterativo</button>
+                        <button class="method-tab" onclick="switchMethod('java', 'recursive', this)">Recursivo</button>
+                        <button class="method-tab" onclick="switchMethod('java', 'dynamic', this)">Dinámico</button>
+                    </div>
+                    <div class="result-display">
+                        <h4>Resultado:</h4>
+                        <div id="java-result" class="fibonacci-sequence"></div>
+                        <div id="java-time" class="execution-time"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JavaScript Card -->
+            <div class="language-card">
+                <div class="language-header javascript">
+                    <div class="language-icon">JS</div>
+                    <h3>JavaScript</h3>
+                </div>
+                <div class="language-content">
+                    <div class="method-tabs">
+                        <button class="method-tab active" onclick="switchMethod('javascript', 'iterative', this)">Iterativo</button>
+                        <button class="method-tab" onclick="switchMethod('javascript', 'recursive', this)">Recursivo</button>
+                        <button class="method-tab" onclick="switchMethod('javascript', 'generator', this)">Generator</button>
+                        <button class="method-tab" onclick="switchMethod('javascript', 'reduce', this)">Reduce</button>
+                    </div>
+                    <div class="result-display">
+                        <h4>Resultado:</h4>
+                        <div id="javascript-result" class="fibonacci-sequence"></div>
+                        <div id="javascript-time" class="execution-time"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C# Card -->
+            <div class="language-card">
+                <div class="language-header csharp">
+                    <div class="language-icon">C#</div>
+                    <h3>C#</h3>
+                </div>
+                <div class="language-content">
+                    <div class="method-tabs">
+                        <button class="method-tab active" onclick="switchMethod('csharp', 'iterative', this)">Iterativo</button>
+                        <button class="method-tab" onclick="switchMethod('csharp', 'recursive', this)">Recursivo</button>
+                        <button class="method-tab" onclick="switchMethod('csharp', 'dynamic', this)">Dinámico</button>
+                        <button class="method-tab" onclick="switchMethod('csharp', 'generator', this)">Generator</button>
+                    </div>
+                    <div class="result-display">
+                        <h4>Resultado:</h4>
+                        <div id="csharp-result" class="fibonacci-sequence"></div>
+                        <div id="csharp-time" class="execution-time"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHP Card -->
+            <div class="language-card">
+                <div class="language-header php">
+                    <div class="language-icon">🐘</div>
+                    <h3>PHP</h3>
+                </div>
+                <div class="language-content">
+                    <div class="method-tabs">
+                        <button class="method-tab active" onclick="switchMethod('php', 'iterative', this)">Iterativo</button>
+                        <button class="method-tab" onclick="switchMethod('php', 'recursive', this)">Recursivo</button>
+                        <button class="method-tab" onclick="switchMethod('php', 'generator', this)">Generator</button>
+                        <button class="method-tab" onclick="switchMethod('php', 'dynamic', this)">Dinámico</button>
+                    </div>
+                    <div class="result-display">
+                        <h4>Resultado:</h4>
+                        <div id="php-result" class="fibonacci-sequence"></div>
+                        <div id="php-time" class="execution-time"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Proyecto de Portafolio - Serie Fibonacci en Múltiples Lenguajes</p>
+            <p>Creado para demostrar habilidades de programación full-stack</p>
+        </footer>
+    </div>
+
+    <!-- Include the JavaScript Fibonacci implementation -->
+    <script src="../javascript/fibonacci.js"></script>
+    
+    <script>
+        // Store current method for each language
+        const currentMethods = {
+            python: 'iterative',
+            java: 'iterative',
+            javascript: 'iterative',
+            csharp: 'iterative',
+            php: 'iterative'
+        };
+
+        // Switch method for a language
+        function switchMethod(language, method, button) {
+            currentMethods[language] = method;
+            
+            // Update active tab
+            const tabs = button.parentElement.querySelectorAll('.method-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Recalculate for this language
+            calculateForLanguage(language);
+        }
+
+        // Calculate Fibonacci for a specific language
+        function calculateForLanguage(language) {
+            const n = parseInt(document.getElementById('terms').value);
+            const method = currentMethods[language];
+            
+            const startTime = performance.now();
+            let sequence;
+            
+            // For JavaScript, we can calculate directly
+            if (language === 'javascript') {
+                sequence = getFibonacciSeries(n, method);
+            } else {
+                // For other languages, we simulate (in a real app, this would call a backend)
+                sequence = getFibonacciSeries(n, 'iterative');
+            }
+            
+            const endTime = performance.now();
+            
+            displayResult(language, sequence, endTime - startTime);
+        }
+
+        // Display result for a language
+        function displayResult(language, sequence, time) {
+            const resultDiv = document.getElementById(`${language}-result`);
+            const timeDiv = document.getElementById(`${language}-time`);
+            
+            resultDiv.innerHTML = sequence
+                .map((num, index) => `<span class="fibonacci-number" style="animation-delay: ${index * 0.05}s">${num}</span>`)
+                .join('');
+            
+            timeDiv.textContent = `Tiempo de ejecución: ${time.toFixed(3)} ms`;
+        }
+
+        // Calculate for all languages
+        function calculateAll() {
+            const languages = ['python', 'java', 'javascript', 'csharp', 'php'];
+            languages.forEach(lang => calculateForLanguage(lang));
+        }
+
+        // Initial calculation
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateAll();
+        });
+
+        // Calculate on Enter key
+        document.getElementById('terms').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                calculateAll();
+            }
+        });
+    </script>
+</body>
+</html>
